@@ -154,6 +154,7 @@ namespace udemy_server.Models
                     .Where(course => course.is_assigned &&
                                      course.course_enroll_date.HasValue &&
                                      course.course_enroll_date.Value.Year == currentYear &&
+                                     /*mergedData.LearningPaths.Where(u=>u.path_id==course.path_id).FirstOrDefault().path_assigned_on.Value.Year==currentYear &&*/
                                      course.course_completion_date.HasValue &&
                                      course.course_completion_date.Value.Year == currentYear)
                     .Sum(course => course.num_video_consumed_minutes);

@@ -305,7 +305,7 @@ namespace udemy_server.Controllers
                 /*return BadRequest(ex.Message);*/
             }
         }
-        [Route("api/Udemy/GetAll")] 
+        [Route("api/Udemy/GetAll")]
         /*public async Task<IHttpActionResult> GetAllData()
         {
             DateTime currentTime = DateTime.Now;
@@ -339,22 +339,30 @@ namespace udemy_server.Controllers
         public async Task<IHttpActionResult> GetAllData()
         {
             // Use the cached data if available
-            if (AllUsersActivity != null && AllUsersCoursesActivities != null && AllUsersPathsActivities != null && AllUsersPathsActivities.Count > 0 && AllearningPaths != null && AllearningPaths.Count > 0 && empDetails != null && empDetails.Count > 0 && AllUsersActivity.Count > 0 && AllUsersCoursesActivities.Count > 0)
+            if (AllUsersActivity == null || AllUsersCoursesActivities == null || AllUsersPathsActivities == null || AllUsersPathsActivities.Count == 0 || AllearningPaths == null || AllearningPaths.Count == 0 || AllUsersActivity.Count == 0 || AllUsersCoursesActivities.Count == 0)
+            {
+                return Content(HttpStatusCode.NotFound, "Please wait for atleast 10minutes so that the data can be loaded");
+            }
+            else if (empDetails == null || empDetails.Count == 0)
+            {
+                return Content(HttpStatusCode.NotFound, "Please upload the All Employees data");
+            }
+            else if (AllUsersActivity != null && AllUsersCoursesActivities != null && AllUsersPathsActivities != null && AllUsersPathsActivities.Count > 0 && AllearningPaths != null && AllearningPaths.Count > 0 && empDetails != null && empDetails.Count > 0 && AllUsersActivity.Count > 0 && AllUsersCoursesActivities.Count > 0)
             {
                 MergeData m = new MergeData();
                 mergedData = m.MergeDat(AllUsersActivity, AllUsersCoursesActivities, AllUsersPathsActivities, AllearningPaths, empDetails);
-            }
-            if (mergedData != null)
-            {
-                var newresult = new
+                if (mergedData != null)
                 {
-                    results = mergedData,
-                    time = new { last_updated = lastRefreshTime.ToString("yyyy-MM-dd HH:mm:ss") }
-                };
-                return Ok(newresult);
+                    var newresult = new
+                    {
+                        results = mergedData,
+                        time = new { last_updated = lastRefreshTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    };
+                    return Ok(newresult);
+                }
             }
 
-            return BadRequest("Data is not available yet. Please wait for the initial refresh.");
+            return BadRequest("unknown error Occured please try again later");
         }
         public async Task RefreshData()
         {
@@ -378,12 +386,14 @@ namespace udemy_server.Controllers
 
         // POST api/<controller>
         [Route("api/Udemy/PostEmps")]
-        public void Post([FromBody] List<EmpDetails> data)
+        public async Task<IHttpActionResult> Post([FromBody] List<EmpDetails> data)
         {
             if (data != null)
             {
                 empDetails = data;
+                return Content(HttpStatusCode.OK,"Records Updated successfully");
             }
+            return Content(HttpStatusCode.BadRequest, "Unknown Error occured");
 
         }
 
