@@ -21,6 +21,7 @@ namespace udemy_server.Models.Entities
         public double? completion_ratio { get; set; }
         public double num_video_consumed_minutes { get; set; }
         public DateTime? course_enroll_date { get; set; }
+        public DateTime? assigned_on { get; set; }
         public DateTime? course_start_date { get; set; }
         public DateTime? course_completion_date { get; set; }
         public DateTime? course_first_completion_date { get; set; }

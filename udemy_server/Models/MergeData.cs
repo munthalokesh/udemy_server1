@@ -141,6 +141,11 @@ namespace udemy_server.Models
                                     course.is_assigned = true;
                                     course.assigned_by = string.Join(" ", pathAssignedByDictionary[pathKey]);
                                     course.path_id = pathKey;
+                                    PathsData p=  AllUsersPathsActivity.Where(u => string.Equals(u.user_email, empDetails[i].Email_Id, StringComparison.OrdinalIgnoreCase) && u.path_id == pathKey).FirstOrDefault();
+                                    if(p!=null)
+                                    {
+                                        course.assigned_on = p.path_assigned_on;
+                                    }
                                 }
                             }
                             /*if(Coursethumbnails.ContainsKey(course.course_id))
@@ -154,6 +159,10 @@ namespace udemy_server.Models
                     .Where(course => course.is_assigned &&
                                      course.course_enroll_date.HasValue &&
                                      course.course_enroll_date.Value.Year == currentYear &&
+                                     course.assigned_on.HasValue &&
+                                     course.assigned_on.Value.Year == currentYear &&
+                                     course.completion_ratio.HasValue &&
+                                     course.completion_ratio.Value==100 &&
                                      /*mergedData.LearningPaths.Where(u=>u.path_id==course.path_id).FirstOrDefault().path_assigned_on.Value.Year==currentYear &&*/
                                      course.course_completion_date.HasValue &&
                                      course.course_completion_date.Value.Year == currentYear)
