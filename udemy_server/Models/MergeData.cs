@@ -209,7 +209,14 @@ namespace udemy_server.Models
 
                     mergedDatas.Add(mergedData);
                 }
-
+                else
+                {
+                    mergedData.EmpDetails = empDetails[i];
+                    mergedData.Activity = null;
+                    mergedData.Courses = null;
+                    mergedData.LearningPaths = null;
+                    mergedDatas.Add(mergedData);
+                }
                 
             }
             return mergedDatas;

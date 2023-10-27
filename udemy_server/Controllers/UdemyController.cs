@@ -390,11 +390,30 @@ namespace udemy_server.Controllers
         {
             if (data != null)
             {
+                /*var groupedData = data.GroupBy(item => item.Email_Id).Select(group =>
+                {
+                    
+                    var concatenatedBU = string.Join(",", group.Select(item => item.BU));
+
+                    
+                    var representative = new EmpDetails
+                    {
+                        ID = group.First().ID, // Assuming you want to keep the email as the ID
+                        Email_Id = group.First().Email_Id,
+                        BU = concatenatedBU,
+                        LicenseType = group.First().LicenseType,
+                        Name = group.First().Name,
+                        Region = group.First().Region,
+                        Band = group.First().Band,
+                        DOJ = group.First().DOJ,
+                    };
+
+                    return representative;
+                }).ToList();*/
                 empDetails = data;
                 return Content(HttpStatusCode.OK,"Records Updated successfully");
             }
             return Content(HttpStatusCode.BadRequest, "Unknown Error occured");
-
         }
 
         // PUT api/<controller>/5
